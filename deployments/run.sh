@@ -10,4 +10,4 @@ now=$(date -u +%H_%M_%S)
 
 log=$logs/$today/$now.log
 
-./codexgo |& tee $log
+./tgo |& tee $log

@@ -1,8 +1,8 @@
 package jwt
 
 import (
-	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/authentications/jwt"
+	"github.com/bastean/tgo/internal/pkg/service/env"
+	"github.com/bastean/tgo/pkg/context/shared/infrastructure/authentications/jwt"
 )
 
 type Payload = jwt.Payload

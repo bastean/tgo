@@ -3,9 +3,9 @@ package terminal
 import (
 	"fmt"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/loggers"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/tgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/tgo/pkg/context/shared/domain/loggers"
+	"github.com/bastean/tgo/pkg/context/user/domain/aggregate/user"
 )
 
 type Confirmation struct {

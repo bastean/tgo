@@ -3,11 +3,11 @@ package user
 import (
 	"net/http"
 
-	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
-	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
-	"github.com/bastean/codexgo/v4/internal/app/server/util/reply"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/user"
+	"github.com/bastean/tgo/internal/app/server/util/errs"
+	"github.com/bastean/tgo/internal/app/server/util/key"
+	"github.com/bastean/tgo/internal/app/server/util/reply"
+	"github.com/bastean/tgo/internal/pkg/service/errors"
+	"github.com/bastean/tgo/internal/pkg/service/user"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )

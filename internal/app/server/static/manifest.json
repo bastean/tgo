@@ -1,15 +1,15 @@
 {
-  "name": "codexGO",
-  "short_name": "codexGO",
+  "name": "tGO",
+  "short_name": "tGO",
   "version": "4.3.1",
-  "description": "codexGO",
+  "description": "tGO",
   "author": "Bastean <bastean@pm.me>",
-  "homepage_url": "https://github.com/bastean/codexgo#readme",
+  "homepage_url": "https://github.com/bastean/tgo#readme",
   "start_url": ".",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#202224",
-  "theme_color": "#202224",
+  "background_color": "#192029",
+  "theme_color": "#192029",
   "icons": [
     {
       "src": "assets/pwa-any.png",

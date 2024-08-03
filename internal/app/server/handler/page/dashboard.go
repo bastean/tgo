@@ -1,11 +1,11 @@
 package page
 
 import (
-	"github.com/bastean/codexgo/v4/internal/app/server/component/page/dashboard"
-	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
-	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/user"
+	"github.com/bastean/tgo/internal/app/server/component/page/dashboard"
+	"github.com/bastean/tgo/internal/app/server/util/errs"
+	"github.com/bastean/tgo/internal/app/server/util/key"
+	"github.com/bastean/tgo/internal/pkg/service/errors"
+	"github.com/bastean/tgo/internal/pkg/service/user"
 	"github.com/gin-gonic/gin"
 )
 

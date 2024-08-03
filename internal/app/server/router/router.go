@@ -4,10 +4,10 @@ import (
 	"embed"
 	"net/http"
 
-	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
-	"github.com/bastean/codexgo/v4/internal/app/server/router/api"
-	"github.com/bastean/codexgo/v4/internal/app/server/router/view"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
+	"github.com/bastean/tgo/internal/app/server/middleware"
+	"github.com/bastean/tgo/internal/app/server/router/api"
+	"github.com/bastean/tgo/internal/app/server/router/view"
+	"github.com/bastean/tgo/internal/pkg/service/env"
 	"github.com/gin-gonic/gin"
 )
 

@@ -18,6 +18,6 @@ runs:
         node-version-file: "package.json"
         cache: "npm"
 
-    - name: Setup codexGO
+    - name: Setup tGO
       shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
       run: make init-ci

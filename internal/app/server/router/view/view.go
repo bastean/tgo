@@ -1,8 +1,8 @@
 package view
 
 import (
-	"github.com/bastean/codexgo/v4/internal/app/server/handler/page"
-	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
+	"github.com/bastean/tgo/internal/app/server/handler/page"
+	"github.com/bastean/tgo/internal/app/server/middleware"
 	"github.com/gin-gonic/gin"
 )
 

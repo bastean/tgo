@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/valueobjs"
+	"github.com/bastean/tgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/tgo/pkg/context/shared/domain/messages/valueobjs"
 )
 
 // Terminology:

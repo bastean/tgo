@@ -5,10 +5,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/transfers"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports/smtp"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/transport/mail"
+	"github.com/bastean/tgo/pkg/context/shared/domain/transfers"
+	"github.com/bastean/tgo/pkg/context/shared/infrastructure/transports/smtp"
+	"github.com/bastean/tgo/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/tgo/pkg/context/user/infrastructure/transport/mail"
 	"github.com/stretchr/testify/suite"
 )
 

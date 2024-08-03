@@ -5,7 +5,7 @@
 #*______URL______
 
 url-server = http://localhost:8080
-url-github = https://github.com/bastean/codexgo
+url-github = https://github.com/bastean/tgo
 
 #*______Go______
 
@@ -207,7 +207,7 @@ release-dry-changelog:
 
 build: lint
 	rm -rf build/
-	go build -ldflags="-s -w" -o build/codexgo ./cmd/codexgo
+	go build -ldflags="-s -w" -o build/tgo ./cmd/tgo
 
 #*______ENV______
 
@@ -241,27 +241,27 @@ docker-it:
 
 compose-dev-down:
 	${compose-env} .env.dev down
-	${docker-rm-vol} codexgo-database-mongo-dev
+	${docker-rm-vol} tgo-database-mongo-dev
 
 compose-dev: compose-dev-down
 	${compose-env} .env.dev up
 
 compose-test-down:
 	${compose-env} .env.test down
-	${docker-rm-vol} codexgo-database-mongo-test
+	${docker-rm-vol} tgo-database-mongo-test
 
 compose-test-integration: compose-test-down
-	${compose-env} .env.test --env-file .env.test.integration up --exit-code-from codexgo
+	${compose-env} .env.test --env-file .env.test.integration up --exit-code-from tgo
 
 compose-test-acceptance: compose-test-down
-	${compose-env} .env.test --env-file .env.test.acceptance up --exit-code-from codexgo
+	${compose-env} .env.test --env-file .env.test.acceptance up --exit-code-from tgo
 
 compose-tests: compose-test-down
-	${compose-env} .env.test up --exit-code-from codexgo
+	${compose-env} .env.test up --exit-code-from tgo
 
 compose-prod-down:
 	${compose-env} .env.prod down
-	${docker-rm-img} codexgo
+	${docker-rm-img} tgo
 
 compose-prod: compose-prod-down
 	${compose-env} .env.prod up

@@ -1,4 +1,4 @@
-module github.com/bastean/codexgo/v4
+module github.com/bastean/tgo
 
 go 1.22
 

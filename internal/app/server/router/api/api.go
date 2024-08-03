@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/bastean/codexgo/v4/internal/app/server/handler/health"
-	"github.com/bastean/codexgo/v4/internal/app/server/handler/user"
-	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
+	"github.com/bastean/tgo/internal/app/server/handler/health"
+	"github.com/bastean/tgo/internal/app/server/handler/user"
+	"github.com/bastean/tgo/internal/app/server/middleware"
 	"github.com/gin-gonic/gin"
 )
 

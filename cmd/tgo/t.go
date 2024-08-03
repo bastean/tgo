@@ -9,13 +9,13 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/bastean/codexgo/v4/internal/app/server"
-	"github.com/bastean/codexgo/v4/internal/pkg/service"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
+	"github.com/bastean/tgo/internal/app/server"
+	"github.com/bastean/tgo/internal/pkg/service"
+	"github.com/bastean/tgo/internal/pkg/service/env"
+	"github.com/bastean/tgo/internal/pkg/service/logger/log"
 )
 
-const cli = "codexgo"
+const cli = "tgo"
 
 var (
 	err error

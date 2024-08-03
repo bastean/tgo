@@ -32,4 +32,4 @@ COPY --from=build app/deployments/run.sh run
 
 RUN chmod +x run
 
-COPY --from=build app/build/codexgo .
+COPY --from=build app/build/tgo .

@@ -1,12 +1,12 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
-	"github.com/bastean/codexgo/v4/pkg/context/user/application/delete"
-	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
-	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
-	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
-	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
+	"github.com/bastean/tgo/pkg/context/user/application/create"
+	"github.com/bastean/tgo/pkg/context/user/application/delete"
+	"github.com/bastean/tgo/pkg/context/user/application/login"
+	"github.com/bastean/tgo/pkg/context/user/application/read"
+	"github.com/bastean/tgo/pkg/context/user/application/update"
+	"github.com/bastean/tgo/pkg/context/user/application/verify"
 )
 
 type (

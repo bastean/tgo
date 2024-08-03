@@ -33,7 +33,7 @@ services:
       timeout: 12s
       retries: 12
 
-  codexgo:
+  tgo:
     container_name: ${CODEXGO_CONTAINER_NAME}
     image: ${CODEXGO_IMAGE_TAG}
     build:
@@ -64,7 +64,7 @@ services:
       - ${CODEXGO_DEV_AIR_PROXY_PORT}:${CODEXGO_DEV_AIR_PROXY_PORT}
     volumes:
       - ${CODEXGO_CONTAINER_VOLUME}
-      - codexgo-modules:/go/pkg/mod
+      - tgo-modules:/go/pkg/mod
     restart: ${CODEXGO_CONTAINER_RESTART}
     depends_on:
       broker-rabbitmq:
@@ -75,11 +75,11 @@ services:
 volumes:
   database-mongodb:
     name: ${DATABASE_MONGODB_CONTAINER_VOLUME}
-  codexgo-logs:
-    name: codexgo-logs
-  codexgo-modules:
-    name: codexgo-modules
+  tgo-logs:
+    name: tgo-logs
+  tgo-modules:
+    name: tgo-modules
 
 networks:
   default:
-    name: codexgo
+    name: tgo
