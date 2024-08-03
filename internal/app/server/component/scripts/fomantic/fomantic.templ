@@ -1,0 +1,30 @@
+package fomantic
+
+script Init() {
+    $.api.settings.api = {
+        "create user" : "/v4/account",
+        "login user" : "/v4/account",
+        "update user" : "/v4/account",
+        "delete user" : "/v4/account",
+    };
+    
+    $.api.settings.serializeForm = true;
+
+    $.api.settings.contentType = "application/json; charset=UTF-8";
+
+    $.api.settings.beforeSend = function(settings) {
+        settings.data = JSON.stringify(settings.data);
+        return settings;
+    };
+
+    $.api.settings.successTest = function(response) {
+        if(response && response.Success) {
+            return response.Success;
+        }
+
+        return false;
+    };
+}
+
+templ Fomantic() {
+}
