@@ -15,18 +15,13 @@ func (repository *UserMock) Save(user *user.User) error {
 	return nil
 }
 
-func (repository *UserMock) Verify(id *user.Id) error {
-	repository.Called(id)
-	return nil
-}
-
 func (repository *UserMock) Update(user *user.User) error {
 	repository.Called(user)
 	return nil
 }
 
-func (repository *UserMock) Delete(id *user.Id) error {
-	repository.Called(id)
+func (repository *UserMock) Delete(username *user.Username) error {
+	repository.Called(username)
 	return nil
 }
 

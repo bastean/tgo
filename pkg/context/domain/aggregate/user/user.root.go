@@ -7,7 +7,7 @@ import (
 
 type User struct {
 	*Username
-	Coins *coins.Coins
+	*coins.Coins
 }
 
 type Primitive struct {

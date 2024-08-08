@@ -10,7 +10,7 @@ type UserSearchCriteria struct {
 
 type User interface {
 	Save(*user.User) error
-	Update(*user.Username) error
+	Update(*user.User) error
 	Delete(*user.Username) error
 	Search(*UserSearchCriteria) (*user.User, error)
 }

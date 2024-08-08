@@ -5,7 +5,7 @@ import (
 )
 
 func ListWithValidValue() *List {
-	value, err := NewList([]string{"monero", "bitcoins", "ethereum"})
+	value, err := NewList([]string{"monero", "bitcoin", "ethereum"})
 
 	if err != nil {
 		errors.Panic(err.Error(), "ListWithValidValue")
@@ -23,7 +23,7 @@ func ListWithInvalidLength() ([]string, error) {
 }
 
 func ListWithInvalidRepeats() ([]string, error) {
-	value := []string{"monero", "monero", "bitcoins"}
+	value := []string{"monero", "monero", "bitcoin"}
 
 	_, err := NewList(value)
 

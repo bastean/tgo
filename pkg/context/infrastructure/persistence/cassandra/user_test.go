@@ -1,51 +1,59 @@
-package mongodb_test
+package cassandra_test
 
 import (
 	"fmt"
 	"os"
 	"testing"
 
+	"github.com/bastean/tgo/pkg/context/domain/aggregate/coins"
 	"github.com/bastean/tgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/tgo/pkg/context/domain/errors"
 	"github.com/bastean/tgo/pkg/context/domain/repository"
-	"github.com/bastean/tgo/pkg/context/infrastructure/cryptographic"
-	"github.com/bastean/tgo/pkg/context/infrastructure/persistence/collection"
-	"github.com/bastean/tgo/pkg/context/infrastructure/persistences/mongodb"
+	"github.com/bastean/tgo/pkg/context/infrastructure/persistence/cassandra"
 	"github.com/stretchr/testify/suite"
 )
 
 type UserTestSuite struct {
 	suite.Suite
-	sut     repository.User
-	hashing *cryptographic.HashingMock
+	sut repository.User
 }
 
 func (suite *UserTestSuite) SetupTest() {
-	session, _ := mongodb.Open(
-		os.Getenv("DATABASE_MONGODB_URI"),
-		os.Getenv("DATABASE_MONGODB_NAME"),
-	)
+	auth := &cassandra.Auth{
+		Hostname: os.Getenv("DATABASE_CASSANDRA_HOSTNAME"),
+		Port:     os.Getenv("DATABASE_CASSANDRA_PORT"),
+		Username: os.Getenv("DATABASE_CASSANDRA_USER"),
+		Password: os.Getenv("DATABASE_CASSANDRA_PASSWORD"),
+	}
 
-	name := "users-test"
+	config := &cassandra.Config{
+		Keyspace: os.Getenv("DATABASE_CASSANDRA_KEYSPACE"),
+		Strategy: "SimpleStrategy",
+		Factor:   1,
+	}
 
-	suite.hashing = new(cryptographic.HashingMock)
+	session, err := cassandra.Open(auth, config)
 
-	suite.sut, _ = collection.OpenUser(session, name, suite.hashing)
+	if err != nil {
+		panic(err)
+	}
+
+	table := "users_test"
+
+	suite.sut, err = cassandra.OpenUser(session, table)
+
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (suite *UserTestSuite) TestSave() {
 	expected := user.Random()
 
-	expected.PullMessages()
-
-	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
-
 	suite.NoError(suite.sut.Save(expected))
 
-	suite.hashing.AssertExpectations(suite.T())
-
 	criteria := &repository.UserSearchCriteria{
-		Id: expected.Id,
+		Username: expected.Username,
 	}
 
 	actual, err := suite.sut.Search(criteria)
@@ -58,13 +66,9 @@ func (suite *UserTestSuite) TestSave() {
 func (suite *UserTestSuite) TestSaveErrDuplicateKey() {
 	random := user.Random()
 
-	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
-
 	suite.NoError(suite.sut.Save(random))
 
 	err := suite.sut.Save(random)
-
-	suite.hashing.AssertExpectations(suite.T())
 
 	var actual *errors.ErrAlreadyExist
 
@@ -72,56 +76,27 @@ func (suite *UserTestSuite) TestSaveErrDuplicateKey() {
 
 	expected := &errors.ErrAlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "HandleDuplicateKeyError",
-		What:  "Id already registered",
+		Where: "Save",
+		What:  fmt.Sprintf("%s already registered", random.Username.Value),
 		Why: errors.Meta{
-			"Field": "Id",
+			"Username": random.Username.Value,
 		},
-		Who: actual.Who,
 	}}
 
 	suite.EqualError(expected, actual.Error())
 }
 
-func (suite *UserTestSuite) TestVerify() {
-	random := user.Random()
-
-	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
-
-	suite.NoError(suite.sut.Save(random))
-
-	suite.NoError(suite.sut.Verify(random.Id))
-
-	criteria := &repository.UserSearchCriteria{
-		Id: random.Id,
-	}
-
-	actual, err := suite.sut.Search(criteria)
-
-	suite.NoError(err)
-
-	suite.True(actual.Verified.Value)
-}
-
 func (suite *UserTestSuite) TestUpdate() {
 	expected := user.Random()
 
-	expected.PullMessages()
-
-	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
-
 	suite.NoError(suite.sut.Save(expected))
 
-	expected.Password = user.PasswordWithValidValue()
-
-	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
+	expected.Coins = coins.Random()
 
 	suite.NoError(suite.sut.Update(expected))
 
-	suite.hashing.AssertExpectations(suite.T())
-
 	criteria := &repository.UserSearchCriteria{
-		Id: expected.Id,
+		Username: expected.Username,
 	}
 
 	actual, err := suite.sut.Search(criteria)
@@ -134,14 +109,12 @@ func (suite *UserTestSuite) TestUpdate() {
 func (suite *UserTestSuite) TestDelete() {
 	random := user.Random()
 
-	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
-
 	suite.NoError(suite.sut.Save(random))
 
-	suite.NoError(suite.sut.Delete(random.Id))
+	suite.NoError(suite.sut.Delete(random.Username))
 
 	criteria := &repository.UserSearchCriteria{
-		Id: random.Id,
+		Username: random.Username,
 	}
 
 	_, err := suite.sut.Search(criteria)
@@ -152,14 +125,10 @@ func (suite *UserTestSuite) TestDelete() {
 func (suite *UserTestSuite) TestSearch() {
 	expected := user.Random()
 
-	expected.PullMessages()
-
-	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
-
 	suite.NoError(suite.sut.Save(expected))
 
 	criteria := &repository.UserSearchCriteria{
-		Id: expected.Id,
+		Username: expected.Username,
 	}
 
 	actual, err := suite.sut.Search(criteria)
@@ -169,11 +138,11 @@ func (suite *UserTestSuite) TestSearch() {
 	suite.Equal(expected, actual)
 }
 
-func (suite *UserTestSuite) TestSearchErrDocumentNotFound() {
+func (suite *UserTestSuite) TestSearchErrNotFound() {
 	random := user.Random()
 
 	criteria := &repository.UserSearchCriteria{
-		Id: random.Id,
+		Username: random.Username,
 	}
 
 	_, err := suite.sut.Search(criteria)
@@ -184,10 +153,10 @@ func (suite *UserTestSuite) TestSearchErrDocumentNotFound() {
 
 	expected := &errors.ErrNotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "HandleDocumentNotFound",
-		What:  fmt.Sprintf("%s not found", random.Id.Value),
+		Where: "Search",
+		What:  fmt.Sprintf("%s not found", random.Username.Value),
 		Why: errors.Meta{
-			"Index": random.Id.Value,
+			"Username": random.Username.Value,
 		},
 		Who: actual.Who,
 	}}

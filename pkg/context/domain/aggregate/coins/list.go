@@ -6,7 +6,7 @@ import (
 )
 
 type List struct {
-	Value []string `validate:"gt=0,unique,alphanum,dive"`
+	Value []string `validate:"gt=0,unique,dive,alphanum"`
 }
 
 func NewList(value []string) (*List, error) {

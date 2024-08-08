@@ -241,14 +241,14 @@ docker-it:
 
 compose-dev-down:
 	${compose-env} .env.dev down
-	${docker-rm-vol} tgo-database-mongo-dev
+	${docker-rm-vol} tgo-database-cassandra-dev
 
 compose-dev: compose-dev-down
 	${compose-env} .env.dev up
 
 compose-test-down:
 	${compose-env} .env.test down
-	${docker-rm-vol} tgo-database-mongo-test
+	${docker-rm-vol} tgo-database-cassandra-test
 
 compose-test-integration: compose-test-down
 	${compose-env} .env.test --env-file .env.test.integration up --exit-code-from tgo

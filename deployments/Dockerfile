@@ -2,9 +2,9 @@ FROM golang:bookworm AS dev
 
 WORKDIR /app
 
-RUN apt update && apt upgrade -y
-
-RUN apt install -y nodejs npm
+RUN apt update \
+ && apt upgrade -y \
+ && apt install -y sudo nodejs npm
 
 COPY Makefile .
 

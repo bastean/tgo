@@ -6,7 +6,7 @@ import (
 )
 
 func CurrencyWithValidValue() *Currency {
-	value, err := NewCurrency(service.Create.CurrencyShort())
+	value, err := NewCurrency(service.Create.RandomString([]string{"USD", "EUR", "RUB", "CNY", "JPY", "BRL"}))
 
 	if err != nil {
 		errors.Panic(err.Error(), "CurrencyWithValidValue")
