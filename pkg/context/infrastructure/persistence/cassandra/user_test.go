@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bastean/tgo/pkg/context/domain/aggregate/coins"
+	"github.com/bastean/tgo/pkg/context/domain/aggregate/portfolio"
 	"github.com/bastean/tgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/tgo/pkg/context/domain/errors"
 	"github.com/bastean/tgo/pkg/context/domain/repository"
@@ -91,7 +91,7 @@ func (suite *UserTestSuite) TestUpdate() {
 
 	suite.NoError(suite.sut.Save(expected))
 
-	expected.Coins = coins.Random()
+	expected.Portfolio = portfolio.Random()
 
 	suite.NoError(suite.sut.Update(expected))
 

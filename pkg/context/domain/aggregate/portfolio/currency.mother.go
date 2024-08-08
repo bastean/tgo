@@ -1,4 +1,4 @@
-package coins
+package portfolio
 
 import (
 	"github.com/bastean/tgo/pkg/context/domain/errors"

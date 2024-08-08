@@ -1,9 +1,9 @@
 package market
 
 import (
-	"github.com/bastean/tgo/pkg/context/domain/aggregate/coins"
+	"github.com/bastean/tgo/pkg/context/domain/aggregate/portfolio"
 )
 
 type Market interface {
-	Price(*coins.List) (map[string]float32, error)
+	Tracker(*portfolio.Portfolio) (map[string]float64, error)
 }

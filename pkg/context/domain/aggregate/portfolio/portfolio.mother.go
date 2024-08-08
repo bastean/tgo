@@ -1,23 +1,23 @@
-package coins
+package portfolio
 
 import (
 	"github.com/bastean/tgo/pkg/context/domain/errors"
 )
 
-func Random() *Coins {
+func Random() *Portfolio {
 	currency := CurrencyWithValidValue()
-	list := ListWithValidValue()
+	coins := CoinsWithValidValue()
 
-	coins, err := New(&Primitive{
+	portfolio, err := New(&Primitive{
 		Currency: currency.Value,
-		List:     list.Value,
+		Coins:    coins.Value,
 	})
 
 	if err != nil {
 		errors.Panic(err.Error(), "Random")
 	}
 
-	return coins
+	return portfolio
 }
 
 func RandomPrimitive() *Primitive {

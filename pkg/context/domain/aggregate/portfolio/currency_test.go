@@ -1,9 +1,9 @@
-package coins_test
+package portfolio_test
 
 import (
 	"testing"
 
-	"github.com/bastean/tgo/pkg/context/domain/aggregate/coins"
+	"github.com/bastean/tgo/pkg/context/domain/aggregate/portfolio"
 	"github.com/bastean/tgo/pkg/context/domain/errors"
 	"github.com/stretchr/testify/suite"
 )
@@ -15,7 +15,7 @@ type CurrencyValueObjectTestSuite struct {
 func (suite *CurrencyValueObjectTestSuite) SetupTest() {}
 
 func (suite *CurrencyValueObjectTestSuite) TestWithInvalidValue() {
-	value, err := coins.CurrencyWithInvalidValue()
+	value, err := portfolio.CurrencyWithInvalidValue()
 
 	var actual *errors.ErrInvalidValue
 

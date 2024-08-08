@@ -32,8 +32,6 @@ func (cassandra *User) Save(user *user.User) error {
 
 	new, err := json.Marshal(user.ToPrimitive())
 
-	new = AddExtraKeyQuotes(new)
-
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Save",
@@ -45,6 +43,8 @@ func (cassandra *User) Save(user *user.User) error {
 		})
 	}
 
+	new = AddExtraKeyQuotes(new)
+
 	insert := fmt.Sprintf("INSERT INTO %s.%s JSON ?", cassandra.Keyspace, cassandra.Table)
 
 	err = cassandra.Session.Query(insert, new).Exec()
@@ -52,7 +52,7 @@ func (cassandra *User) Save(user *user.User) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Save",
-			What:  "Failure to save a user",
+			What:  "Failure to save a User",
 			Why: errors.Meta{
 				"Username": user.Username.Value,
 			},
@@ -66,8 +66,6 @@ func (cassandra *User) Save(user *user.User) error {
 func (cassandra *User) Update(user *user.User) error {
 	updated, err := json.Marshal(user.ToPrimitive())
 
-	updated = AddExtraKeyQuotes(updated)
-
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Save",
@@ -79,6 +77,8 @@ func (cassandra *User) Update(user *user.User) error {
 		})
 	}
 
+	updated = AddExtraKeyQuotes(updated)
+
 	insert := fmt.Sprintf("INSERT INTO %s.%s JSON ? DEFAULT UNSET", cassandra.Keyspace, cassandra.Table)
 
 	err = cassandra.Session.Query(insert, updated).Exec()
@@ -86,7 +86,7 @@ func (cassandra *User) Update(user *user.User) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Update",
-			What:  "Failure to update a user",
+			What:  "Failure to update a User",
 			Why: errors.Meta{
 				"Username": user.Username.Value,
 			},
@@ -105,7 +105,7 @@ func (cassandra *User) Delete(username *user.Username) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Delete",
-			What:  "Failure to delete a user",
+			What:  "Failure to delete a User",
 			Why: errors.Meta{
 				"Username": username.Value,
 			},
@@ -136,7 +136,7 @@ func (cassandra *User) Search(criteria *repository.UserSearchCriteria) (*user.Us
 	case err != nil:
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "Search",
-			What:  "Failure to search a user",
+			What:  "Failure to search a User",
 			Why: errors.Meta{
 				"Username": criteria.Username.Value,
 			},
@@ -144,9 +144,9 @@ func (cassandra *User) Search(criteria *repository.UserSearchCriteria) (*user.Us
 		})
 	}
 
-	primitive := new(user.Primitive)
-
 	encoded := RemoveExtraKeyQuotes(result["[json]"].(string))
+
+	primitive := new(user.Primitive)
 
 	err = json.Unmarshal(encoded, primitive)
 
@@ -169,8 +169,8 @@ func (cassandra *User) Search(criteria *repository.UserSearchCriteria) (*user.Us
 			Where: "Search",
 			What:  "Failure to create an User from a Primitive",
 			Why: errors.Meta{
-				"Primitive": primitive,
 				"Username":  criteria.Username.Value,
+				"Primitive": primitive,
 			},
 			Who: err,
 		})
@@ -181,12 +181,12 @@ func (cassandra *User) Search(criteria *repository.UserSearchCriteria) (*user.Us
 
 func OpenUser(session *Cassandra, table string) (repository.User, error) {
 	types := &struct {
-		Coins string
+		Portfolio string
 	}{
-		Coins: "coins",
+		Portfolio: "portfolio",
 	}
 
-	create := fmt.Sprintf("CREATE TYPE IF NOT EXISTS %s.%s (\"Currency\" text, \"List\" list<text>)", session.Keyspace, types.Coins)
+	create := fmt.Sprintf("CREATE TYPE IF NOT EXISTS %s.%s (\"Currency\" text, \"Coins\" list<text>)", session.Keyspace, types.Portfolio)
 
 	err := session.Query(create).Exec()
 
@@ -195,13 +195,13 @@ func OpenUser(session *Cassandra, table string) (repository.User, error) {
 			Where: "OpenUser",
 			What:  "Failure to create a Type",
 			Why: errors.Meta{
-				"Type": types.Coins,
+				"Type": types.Portfolio,
 			},
 			Who: err,
 		})
 	}
 
-	create = fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s.%s (\"Username\" text PRIMARY KEY, \"Coins\" frozen<%s>)", session.Keyspace, table, types.Coins)
+	create = fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s.%s (\"Username\" text PRIMARY KEY, \"Portfolio\" frozen<%s>)", session.Keyspace, table, types.Portfolio)
 
 	err = session.Query(create).Exec()
 

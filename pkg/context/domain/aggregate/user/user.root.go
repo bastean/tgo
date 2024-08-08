@@ -1,38 +1,38 @@
 package user
 
 import (
-	"github.com/bastean/tgo/pkg/context/domain/aggregate/coins"
+	"github.com/bastean/tgo/pkg/context/domain/aggregate/portfolio"
 	"github.com/bastean/tgo/pkg/context/domain/errors"
 )
 
 type User struct {
 	*Username
-	*coins.Coins
+	*portfolio.Portfolio
 }
 
 type Primitive struct {
-	Username string
-	Coins    *coins.Primitive
+	Username  string
+	Portfolio *portfolio.Primitive
 }
 
 func create(primitive *Primitive) (*User, error) {
 	username, errUsername := NewUsername(primitive.Username)
-	coins, errCoins := coins.New(primitive.Coins)
+	portfolio, errPortfolio := portfolio.New(primitive.Portfolio)
 
-	if err := errors.Join(errUsername, errCoins); err != nil {
+	if err := errors.Join(errUsername, errPortfolio); err != nil {
 		return nil, errors.BubbleUp(err, "create")
 	}
 
 	return &User{
-		Username: username,
-		Coins:    coins,
+		Username:  username,
+		Portfolio: portfolio,
 	}, nil
 }
 
 func (user *User) ToPrimitive() *Primitive {
 	return &Primitive{
-		Username: user.Username.Value,
-		Coins:    user.Coins.ToPrimitive(),
+		Username:  user.Username.Value,
+		Portfolio: user.Portfolio.ToPrimitive(),
 	}
 }
 

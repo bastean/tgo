@@ -1,17 +1,17 @@
 package user
 
 import (
-	"github.com/bastean/tgo/pkg/context/domain/aggregate/coins"
+	"github.com/bastean/tgo/pkg/context/domain/aggregate/portfolio"
 	"github.com/bastean/tgo/pkg/context/domain/errors"
 )
 
 func Random() *User {
 	username := UsernameWithValidValue()
-	coins := coins.Random()
+	portfolio := portfolio.Random()
 
 	user, err := New(&Primitive{
-		Username: username.Value,
-		Coins:    coins.ToPrimitive(),
+		Username:  username.Value,
+		Portfolio: portfolio.ToPrimitive(),
 	})
 
 	if err != nil {
