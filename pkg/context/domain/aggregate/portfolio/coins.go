@@ -1,12 +1,21 @@
 package portfolio
 
 import (
+	"fmt"
+
 	"github.com/bastean/tgo/pkg/context/domain/errors"
 	"github.com/bastean/tgo/pkg/context/domain/service"
 )
 
+const (
+	CoinsMinAmount          = "1"
+	CoinsMaxAmount          = "10"
+	CoinMinCharactersLength = "4"
+	CoinMaxCharactersLength = "20"
+)
+
 type Coins struct {
-	Value []string `validate:"gt=0,unique,dive,alphanum"`
+	Value []string `validate:"gte=1,lte=10,unique,dive,gte=4,lte=20,alphanum"`
 }
 
 func NewCoins(value []string) (*Coins, error) {
@@ -17,7 +26,7 @@ func NewCoins(value []string) (*Coins, error) {
 	if service.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewCoins",
-			What:  "Coins list must be greater than zero, unique and alphanumeric only",
+			What:  fmt.Sprintf("The amount of coins must be between %s and %s, without repeating, the names must be from %s to %s characters and only alphanumeric", CoinsMinAmount, CoinsMaxAmount, CoinMinCharactersLength, CoinMaxCharactersLength),
 			Why: errors.Meta{
 				"Coins": value,
 			},

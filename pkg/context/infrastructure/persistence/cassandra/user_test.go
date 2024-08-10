@@ -35,7 +35,7 @@ func (suite *UserTestSuite) SetupTest() {
 	session, err := cassandra.Open(auth, config)
 
 	if err != nil {
-		panic(err)
+		errors.Panic(err.Error(), "SetupTest")
 	}
 
 	table := "users_test"
@@ -43,7 +43,7 @@ func (suite *UserTestSuite) SetupTest() {
 	suite.sut, err = cassandra.OpenUser(session, table)
 
 	if err != nil {
-		panic(err)
+		errors.Panic(err.Error(), "SetupTest")
 	}
 }
 

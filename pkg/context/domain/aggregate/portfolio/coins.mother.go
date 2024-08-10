@@ -30,6 +30,14 @@ func CoinsWithInvalidRepeats() ([]string, error) {
 	return value, err
 }
 
+func CoinsWithInvalidNamesLength() ([]string, error) {
+	value := []string{"x"}
+
+	_, err := NewCoins(value)
+
+	return value, err
+}
+
 func CoinsWithInvalidAlphanumeric() ([]string, error) {
 	value := []string{"<></>"}
 

@@ -8,8 +8,10 @@ import (
 	"github.com/bastean/tgo/pkg/context/domain/service"
 )
 
-const UsernameMinCharactersLength = "2"
-const UsernameMaxCharactersLength = "20"
+const (
+	UsernameMinCharactersLength = "2"
+	UsernameMaxCharactersLength = "20"
+)
 
 type Username struct {
 	Value string `validate:"gte=2,lte=20,alphanum"`

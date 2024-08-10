@@ -13,6 +13,7 @@ type Currency struct {
 
 func NewCurrency(value string) (*Currency, error) {
 	value = strings.TrimSpace(value)
+	value = strings.ToUpper(value)
 
 	valueObj := &Currency{
 		Value: value,

@@ -24,7 +24,7 @@ func (suite *CoinsValueObjectTestSuite) TestWithInvalidLength() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewCoins",
-		What:  "Coins list must be greater than zero, unique and alphanumeric only",
+		What:  "The amount of coins must be between 1 and 10, without repeating, the names must be from 4 to 20 characters and only alphanumeric",
 		Why: errors.Meta{
 			"Coins": value,
 		},
@@ -43,7 +43,26 @@ func (suite *CoinsValueObjectTestSuite) TestWithInvalidRepeats() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewCoins",
-		What:  "Coins list must be greater than zero, unique and alphanumeric only",
+		What:  "The amount of coins must be between 1 and 10, without repeating, the names must be from 4 to 20 characters and only alphanumeric",
+		Why: errors.Meta{
+			"Coins": value,
+		},
+	}}
+
+	suite.EqualError(expected, actual.Error())
+}
+
+func (suite *CoinsValueObjectTestSuite) TestWithInvalidNamesLength() {
+	value, err := portfolio.CoinsWithInvalidNamesLength()
+
+	var actual *errors.ErrInvalidValue
+
+	suite.ErrorAs(err, &actual)
+
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "NewCoins",
+		What:  "The amount of coins must be between 1 and 10, without repeating, the names must be from 4 to 20 characters and only alphanumeric",
 		Why: errors.Meta{
 			"Coins": value,
 		},
@@ -62,7 +81,7 @@ func (suite *CoinsValueObjectTestSuite) TestWithInvalidAlphanumeric() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewCoins",
-		What:  "Coins list must be greater than zero, unique and alphanumeric only",
+		What:  "The amount of coins must be between 1 and 10, without repeating, the names must be from 4 to 20 characters and only alphanumeric",
 		Why: errors.Meta{
 			"Coins": value,
 		},
