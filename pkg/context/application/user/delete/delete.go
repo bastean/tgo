@@ -3,36 +3,40 @@ package delete
 import (
 	"github.com/bastean/tgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/tgo/pkg/context/domain/errors"
-	"github.com/bastean/tgo/pkg/context/domain/hashing"
 	"github.com/bastean/tgo/pkg/context/domain/repository"
-	"github.com/bastean/tgo/pkg/context/domain/service"
+	"github.com/bastean/tgo/pkg/context/domain/usecase"
 )
 
 type Delete struct {
 	repository.User
-	hashing.Hashing
 }
 
-func (delete *Delete) Run(id *user.Id, password *user.Password) error {
+func (delete *Delete) Run(username string) error {
+	usernameVO, err := user.NewUsername(username)
+
+	if err != nil {
+		return errors.BubbleUp(err, "Run")
+	}
+
 	found, err := delete.User.Search(&repository.UserSearchCriteria{
-		Id: id,
+		Username: usernameVO,
 	})
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(delete.Hashing, found.Password.Value, password.Value)
-
-	if err != nil {
-		return errors.BubbleUp(err, "Run")
-	}
-
-	err = delete.User.Delete(found.Id)
+	err = delete.User.Delete(found.Username)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
 	return nil
+}
+
+func New(repository repository.User) usecase.UserDelete {
+	return &Delete{
+		User: repository,
+	}
 }

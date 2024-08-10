@@ -26,9 +26,7 @@ func (suite *MarketTestSuite) SetupTest() {
 		errors.Panic(err.Error(), "SetupTest")
 	}
 
-	suite.sut = &coingecko.Market{
-		CoinGecko: session,
-	}
+	suite.sut = coingecko.NewMarket(session)
 }
 
 func (suite *MarketTestSuite) TestTracker() {
@@ -41,7 +39,7 @@ func (suite *MarketTestSuite) TestTracker() {
 	suite.NoError(err)
 
 	for _, expected := range coins {
-		if _, ok := actual[expected]; !ok {
+		if _, ok := actual.Value[expected]; !ok {
 			suite.Equal(expected, "")
 		}
 	}

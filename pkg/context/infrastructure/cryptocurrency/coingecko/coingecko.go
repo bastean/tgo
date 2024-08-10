@@ -164,8 +164,10 @@ func (api *CoinGecko) CoinPrices(currency string, coins []string) (map[string]fl
 
 	prices := map[string]float64{}
 
+	var price float64
+
 	for _, coin := range coins {
-		price := data[coin][currency]
+		price = data[coin][currency]
 
 		if price > 0 {
 			price = math.Floor(price*100) / 100

@@ -6,21 +6,21 @@ import (
 
 type (
 	UserCreate interface {
-		Run(*user.User) error
+		Run(*user.Primitive) error
 	}
 	UserRead interface {
-		Run(*user.Username) (*user.User, error)
+		Run(username string) (*user.Primitive, error)
 	}
 	UserUpdate interface {
-		Run(*user.User) error
+		Run(*user.Primitive) error
 	}
 	UserDelete interface {
-		Run(*user.Username) error
+		Run(username string) error
 	}
 )
 
 type (
-	CoinsPrice interface {
-		Run(*user.Username) (map[string]float32, error)
+	PortfolioPrice interface {
+		Run(username string) (map[string]float64, error)
 	}
 )

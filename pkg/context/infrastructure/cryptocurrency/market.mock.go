@@ -9,7 +9,7 @@ type MarketMock struct {
 	mock.Mock
 }
 
-func (market *MarketMock) Tracker(portfolio *portfolio.Portfolio) (map[string]float64, error) {
-	args := market.Called(portfolio)
-	return args.Get(0).(map[string]float64), nil
+func (market *MarketMock) Tracker(wallet *portfolio.Portfolio) (*portfolio.Prices, error) {
+	args := market.Called(wallet)
+	return args.Get(0).(*portfolio.Prices), nil
 }

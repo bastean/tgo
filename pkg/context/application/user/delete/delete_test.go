@@ -3,58 +3,37 @@ package delete_test
 import (
 	"testing"
 
-	"github.com/bastean/tgo/pkg/context/application/delete"
+	"github.com/bastean/tgo/pkg/context/application/user/delete"
 	"github.com/bastean/tgo/pkg/context/domain/aggregate/user"
-	"github.com/bastean/tgo/pkg/context/domain/handlers"
 	"github.com/bastean/tgo/pkg/context/domain/repository"
 	"github.com/bastean/tgo/pkg/context/domain/usecase"
-	"github.com/bastean/tgo/pkg/context/infrastructure/cryptographic"
 	"github.com/bastean/tgo/pkg/context/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type DeleteTestSuite struct {
 	suite.Suite
-	sut        handlers.Command[*delete.Command]
-	delete     usecase.Delete
-	hashing    *cryptographic.HashingMock
+	sut        usecase.UserDelete
 	repository *persistence.UserMock
 }
 
 func (suite *DeleteTestSuite) SetupTest() {
 	suite.repository = new(persistence.UserMock)
-
-	suite.hashing = new(cryptographic.HashingMock)
-
-	suite.delete = &delete.Delete{
-		User:    suite.repository,
-		Hashing: suite.hashing,
-	}
-
-	suite.sut = &delete.Handler{
-		Delete: suite.delete,
-	}
+	suite.sut = delete.New(suite.repository)
 }
 
 func (suite *DeleteTestSuite) TestDelete() {
 	random := user.Random()
 
-	command := &delete.Command{
-		Id:       random.Id.Value,
-		Password: random.Password.Value,
-	}
-
 	criteria := &repository.UserSearchCriteria{
-		Id: random.Id,
+		Username: random.Username,
 	}
 
 	suite.repository.On("Search", criteria).Return(random)
 
-	suite.hashing.On("IsNotEqual", random.Password.Value, random.Password.Value).Return(false)
+	suite.repository.On("Delete", random.Username)
 
-	suite.repository.On("Delete", random.Id)
-
-	suite.NoError(suite.sut.Handle(command))
+	suite.NoError(suite.sut.Run(random.Username.Value))
 
 	suite.repository.AssertExpectations(suite.T())
 }

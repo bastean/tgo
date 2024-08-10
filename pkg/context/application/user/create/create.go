@@ -1,33 +1,34 @@
-package verify
+package create
 
 import (
 	"github.com/bastean/tgo/pkg/context/domain/aggregate/user"
 	"github.com/bastean/tgo/pkg/context/domain/errors"
 	"github.com/bastean/tgo/pkg/context/domain/repository"
+	"github.com/bastean/tgo/pkg/context/domain/usecase"
 )
 
-type Verify struct {
+type Create struct {
 	repository.User
 }
 
-func (verify *Verify) Run(id *user.Id) error {
-	found, err := verify.User.Search(&repository.UserSearchCriteria{
-		Id: id,
-	})
+func (create *Create) Run(primitive *user.Primitive) error {
+	new, err := user.New(primitive)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	if found.Verified.Value {
-		return nil
-	}
-
-	err = verify.User.Verify(id)
+	err = create.User.Save(new)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
 	return nil
+}
+
+func New(repository repository.User) usecase.UserCreate {
+	return &Create{
+		User: repository,
+	}
 }

@@ -5,5 +5,5 @@ import (
 )
 
 type Market interface {
-	Tracker(*portfolio.Portfolio) (map[string]float64, error)
+	Tracker(*portfolio.Portfolio) (*portfolio.Prices, error)
 }

@@ -9,20 +9,20 @@ type Market struct {
 	*CoinGecko
 }
 
-func (market *Market) Tracker(portfolio *portfolio.Portfolio) (map[string]float64, error) {
-	err := market.IsCurrencySupported(portfolio.Currency.Value)
+func (market *Market) Tracker(wallet *portfolio.Portfolio) (*portfolio.Prices, error) {
+	err := market.IsCurrencySupported(wallet.Currency.Value)
 
 	if err != nil {
 		errors.BubbleUp(err, "Tracker")
 	}
 
-	prices, err := market.CoinPrices(portfolio.Currency.Value, portfolio.Coins.Value)
+	prices, err := market.CoinPrices(wallet.Currency.Value, wallet.Coins.Value)
 
 	if err != nil {
 		errors.BubbleUp(err, "Tracker")
 	}
 
-	return prices, nil
+	return portfolio.NewPrices(prices), nil
 }
 
 func NewMarket(coingecko *CoinGecko) *Market {

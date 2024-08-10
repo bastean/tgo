@@ -16,7 +16,7 @@ func CurrencyWithValidValue() *Currency {
 }
 
 func CurrencyWithInvalidValue() (string, error) {
-	value := "x"
+	value := "X"
 
 	_, err := NewCurrency(value)
 
