@@ -17,6 +17,7 @@ type (
 )
 
 var (
+	Panic    = errors.Panic
 	BubbleUp = errors.BubbleUp
 	As       = errors.As
 	Is       = errors.Is
@@ -26,3 +27,7 @@ var (
 	NewFailure  = errors.NewFailure
 	NewInternal = errors.NewInternal
 )
+
+func IsNot(err error, target error) bool {
+	return !Is(err, target)
+}

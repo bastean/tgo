@@ -1,0 +1,97 @@
+package home
+
+var ReadFormTagId = "read"
+
+script ReadFormInit(formTagId string) {
+    $(`#${formTagId}`)
+        .form({
+            on: "blur",
+            inline: true,
+            preventLeaving: true,
+            keyboardShortcuts: false,
+            fields: {
+                Username: {
+                    rules: [
+                        {
+                            type: "size[2..20]"
+                        },
+                        {
+                            type: "regExp[/^[A-Za-z0-9]+$/]",
+                            prompt: "{name} must be alphanumeric only"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
+                        }
+                    ]
+                }
+            }
+        })
+        .api({
+            action: "user_read", 
+            method: "POST",
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: "info",
+                    displayTime: 0,
+                    closeIcon: true,
+                    title: response.Message,
+                    message: `
+                    <div class="ui divider"></div>
+                    <div class="ui animated bulleted list">
+                        <div class="item">
+                            <b>Username:</b> ${response.Data.Username}
+                        </div>
+                        <div class="item">
+                            <b>Portfolio</b>
+                            <div class="list">
+                                <div class="item">
+                                    <b>Currency:</b> ${response.Data.Portfolio.Currency}
+                                </div>
+                                <div class="item">
+                                    <b>Coins:</b> ${response.Data.Portfolio.Coins}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `
+                });
+
+                _.delay(function() {
+                    $(`#${formTagId}`).form("reset");
+                }, 1000);
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: "error",
+                    message: response.Message,
+                    showProgress: "top"
+                });
+            }
+        })
+    ;
+}
+
+templ ReadForm() {
+	<form id={ ReadFormTagId } class="ui inverted form">
+		<div class="required field">
+			<label>Username</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="user icon"></i>
+				<input type="text" placeholder="Username" name="Username"/>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui middle aligned center aligned grid">
+			<div class="column">
+				<button class="ui vertical animated fluid primary submit button">
+					<div class="hidden content"><i class="search icon"></i></div>
+					<div class="visible content">
+						Read
+					</div>
+				</button>
+			</div>
+		</div>
+	</form>
+	@ReadFormInit(ReadFormTagId)
+}

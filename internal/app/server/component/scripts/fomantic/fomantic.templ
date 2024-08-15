@@ -1,0 +1,39 @@
+package fomantic
+
+script Init() {
+    user = {
+        "user_create" : "/v0/user",
+        "user_read"   : "/v0/user",
+        "user_update" : "/v0/user",
+        "user_delete" : "/v0/user",
+    };
+
+    portfolio = {
+        "portfolio_review" : "/v0/portfolio",
+    };
+
+    $.api.settings.api = {
+        ...user,
+        ...portfolio,
+    };
+    
+    $.api.settings.serializeForm = true;
+
+    $.api.settings.contentType = "application/json; charset=UTF-8";
+
+    $.api.settings.beforeSend = function(settings) {
+        settings.data = JSON.stringify(settings.data);
+        return settings;
+    };
+
+    $.api.settings.successTest = function(response) {
+        if(response && response.Success) {
+            return response.Success;
+        }
+
+        return false;
+    };
+}
+
+templ Fomantic() {
+}

@@ -99,7 +99,7 @@ generate-required:
 
 #*______Initializations______
 
-init: upgrade-managers install-tooling download-dependencies generate-required
+init: upgrade-managers install-tooling download-dependencies copydeps generate-required
 
 init-ci: upgrade-managers install-tooling-ci download-dependencies generate-required
 

@@ -1,0 +1,99 @@
+package home
+
+var PortfolioFormTagId = "portfolio"
+
+script PortfolioFormInit(formTagId string) {
+    $(`#${formTagId}`)
+        .form({
+            on: "blur",
+            inline: true,
+            preventLeaving: true,
+            keyboardShortcuts: false,
+            fields: {
+                Username: {
+                    rules: [
+                        {
+                            type: "size[2..20]"
+                        },
+                        {
+                            type: "regExp[/^[A-Za-z0-9]+$/]",
+                            prompt: "{name} must be alphanumeric only"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
+                        }
+                    ]
+                }
+            }
+        })
+        .api({
+            action: "portfolio_review", 
+            method: "POST",
+            onSuccess: function(response, element, xhr) {
+                prices = "";
+
+                _.forIn(response.Data.Prices, function(price, coin) {
+                    prices += `
+                        <div class="item">
+                            <b>${coin}:</b> ${price}
+                        </div>
+                    `
+                });
+
+                $.toast({
+                    class: "info",
+                    displayTime: 0,
+                    closeIcon: true,
+                    title: response.Message,
+                    message: `
+                    <div class="ui divider"></div>
+                    <div class="ui animated bulleted list">
+                        <div class="item">
+                            <b>Prices</b>
+                            <div class="list">
+                                ${prices}
+                            </div>
+                        </div>
+                    </div>
+                    `
+                });
+
+                _.delay(function() {
+                    $(`#${formTagId}`).form("reset");
+                }, 1000);
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: "error",
+                    message: response.Message,
+                    showProgress: "top"
+                });
+            }
+        })
+    ;
+}
+
+templ PortfolioForm() {
+	<form id={ PortfolioFormTagId } class="ui inverted form">
+		<div class="required field">
+			<label>Username</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="user icon"></i>
+				<input type="text" placeholder="Username" name="Username"/>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui middle aligned center aligned grid">
+			<div class="column">
+				<button class="ui vertical animated fluid primary submit button">
+					<div class="hidden content"><i class="search icon"></i></div>
+					<div class="visible content">
+						Review
+					</div>
+				</button>
+			</div>
+		</div>
+	</form>
+	@PortfolioFormInit(PortfolioFormTagId)
+}

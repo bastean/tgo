@@ -1,0 +1,71 @@
+package home
+
+import (
+	"github.com/bastean/tgo/internal/app/server/component/layout"
+	"github.com/bastean/tgo/internal/app/server/component/scripts"
+)
+
+script PageInit() {
+    $(".ui.container")
+        .transition("fade in", "3s")
+    ;
+
+    $(".ui.menu .item")
+        .tab()
+    ;
+
+    $(".ui.dropdown[id='coins']")
+        .dropdown({
+            allowAdditions: true,
+            maxSelections: 10
+        })
+    ;
+
+    $(".ui.dropdown[id='currency']")
+        .dropdown({
+            allowAdditions: true,
+            maxSelections: 1
+        })
+    ;
+}
+
+templ Page() {
+	@layout.Index(scripts.Head{}, scripts.Body{}) {
+		<div class="ui centered grid container" style="height: 100%;">
+			<div class="sixteen wide mobile eight wide computer column">
+				<div class="ui basic segment">
+					<a
+						href="https://github.com/bastean/tgo"
+						rel="noopener noreferrer"
+						target="_blank"
+					><img class="ui medium centered image" src="/public/static/assets/logo.png"/></a>
+				</div>
+				<div class="ui divider"></div>
+				<div class="ui top attached inverted tabular menu">
+					<a class="item active" data-tab="create">Create</a>
+					<a class="item" data-tab="read">Read</a>
+					<a class="item" data-tab="update">Update</a>
+					<a class="item" data-tab="delete">Delete</a>
+					<a class="item" data-tab="portfolio">Portfolio</a>
+				</div>
+				<div class="ui bottom attached inverted tab segment active" data-tab="create">
+					@CreateForm()
+					@TermsModal()
+				</div>
+				<div class="ui bottom attached inverted tab segment" data-tab="read">
+					@ReadForm()
+				</div>
+				<div class="ui bottom attached inverted tab segment" data-tab="update">
+					@UpdateForm()
+				</div>
+				<div class="ui bottom attached inverted tab segment" data-tab="delete">
+					@DeleteForm()
+				</div>
+				<div class="ui bottom attached inverted tab segment" data-tab="portfolio">
+					@PortfolioForm()
+				</div>
+			</div>
+		</div>
+		@PageInit()
+	}
+}

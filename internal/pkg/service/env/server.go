@@ -5,13 +5,9 @@ import (
 )
 
 var (
-	ServerEchoHostname          = os.Getenv("TGO_SERVER_ECHO_HOSTNAME")
-	ServerEchoPort              = os.Getenv("TGO_SERVER_ECHO_PORT")
-	ServerEchoURL               = os.Getenv("TGO_SERVER_ECHO_URL")
-	ServerEchoMode              = os.Getenv("TGO_SERVER_ECHO_MODE")
-	ServerEchoAllowedHosts      = os.Getenv("TGO_SERVER_ECHO_ALLOWED_HOSTS")
-	ServerEchoCookieSecretKey   = os.Getenv("TGO_SERVER_ECHO_COOKIE_SECRET_KEY")
-	ServerEchoCookieSessionName = os.Getenv("TGO_SERVER_ECHO_COOKIE_SESSION_NAME")
+	ServerEchoHostname = os.Getenv("TGO_SERVER_ECHO_HOSTNAME")
+	ServerEchoPort     = os.Getenv("TGO_SERVER_ECHO_PORT")
+	ServerEchoURL      = os.Getenv("TGO_SERVER_ECHO_URL")
 )
 
 func HasServerEchoProxy() (string, bool) {

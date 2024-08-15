@@ -19,7 +19,7 @@ type MarketTestSuite struct {
 func (suite *MarketTestSuite) SetupTest() {
 	session, err := coingecko.New(
 		os.Getenv("TGO_API_COINGECKO_DEMO_KEY"),
-		"https://api.coingecko.com/api/v3/",
+		"https://api.coingecko.com/api/v3",
 	)
 
 	if err != nil {

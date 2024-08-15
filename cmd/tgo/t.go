@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/bastean/tgo/internal/app/server"
 	"github.com/bastean/tgo/internal/pkg/service"
 	"github.com/bastean/tgo/internal/pkg/service/env"
 	"github.com/bastean/tgo/internal/pkg/service/logger/log"
@@ -49,17 +50,15 @@ func main() {
 
 	log.Started(Services)
 
-	/*
-		log.Starting(Apps)
+	log.Starting(Apps)
 
-		go func() {
-			if err := server.Up(); err != nil {
-				log.Fatal(err.Error())
-			}
-		}()
+	go func() {
+		if err := server.Up(); err != nil {
+			log.Fatal(err.Error())
+		}
+	}()
 
-		log.Started(Apps)
-	*/
+	log.Started(Apps)
 
 	log.Info("Press Ctrl+C to exit")
 
@@ -73,15 +72,13 @@ func main() {
 
 	defer cancel()
 
-	/*
-		log.Stopping(Apps)
+	log.Stopping(Apps)
 
-		if err = server.Down(ctx); err != nil {
-			log.Error(err.Error())
-		}
+	if err = server.Down(ctx); err != nil {
+		log.Error(err.Error())
+	}
 
-		log.Stopped(Apps)
-	*/
+	log.Stopped(Apps)
 
 	log.Stopping(Services)
 

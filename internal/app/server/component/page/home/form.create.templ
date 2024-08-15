@@ -1,0 +1,145 @@
+package home
+
+var CreateFormTagId = "create"
+
+script CreateFormInit(formTagId string) {
+    $(`#${formTagId}`)
+        .form({
+            on: "blur",
+            inline: true,
+            preventLeaving: true,
+            keyboardShortcuts: false,
+            fields: {
+                Username: {
+                    rules: [
+                        {
+                            type: "size[2..20]"
+                        },
+                        {
+                            type: "regExp[/^[A-Za-z0-9]+$/]",
+                            prompt: "{name} must be alphanumeric only"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
+                        }
+                    ]
+                },
+                "Portfolio[Currency]": {
+                    rules: [
+                        {
+                            type: "exactCount[1]",
+                        },
+                    ]
+                },
+                "Portfolio[Coins]": {
+                    rules: [
+                        {
+                            type: "minCount[1]",
+                        },
+                        {
+                            type: "maxCount[10]",
+                        }
+                    ]
+                },
+                Terms: {
+                    rules: [
+                        {
+                            type: "checked",
+                            prompt: "Terms & Conditions must be checked"
+                        }
+                    ]
+                }
+            }
+        })
+        .api({
+            action: "user_create", 
+            method: "PUT",
+            beforeSend: function(settings) {
+                list = settings.data.Portfolio.Coins;
+
+                coins = _.split(list, ",", -1);
+
+                settings.data.Portfolio.Coins = coins;
+
+                settings.data = JSON.stringify(settings.data);
+
+                return settings;
+            },
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: "success",
+                    message: response.Message,
+                    showProgress: "top",
+                });
+
+                _.delay(function() {
+                    $(`#${formTagId}`).form("reset");
+                }, 1000);
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: "error",
+                    message: response.Message,
+                    showProgress: "top"
+                });
+            }
+        })
+    ;
+}
+
+script ShowTerms(modalTagId string) {
+    $(`#${modalTagId}`).modal("show");
+}
+
+templ CreateForm() {
+	<form id={ CreateFormTagId } class="ui inverted form">
+		<div class="required field">
+			<label>Username</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="user icon"></i>
+				<input type="text" placeholder="Username" name="Username"/>
+			</div>
+		</div>
+		<label>Portfolio</label>
+		<div class="ui divider"></div>
+		<div class="required field">
+			<label>Currency</label>
+			<div id="currency" class="ui inverted fluid multiple search selection dropdown">
+				<input type="hidden" name="Portfolio[Currency]"/>
+				<div class="default text">
+					<i class="money bill wave icon"></i>
+					USD, EUR, RUB...
+				</div>
+			</div>
+		</div>
+		<div class="required field">
+			<label>Coins</label>
+			<div id="coins" class="ui inverted fluid multiple search selection dropdown">
+				<input type="hidden" name="Portfolio[Coins]"/>
+				<div class="default text">
+					<i class="monero icon"></i>
+					Monero, Bitcoin, Ethereum...
+				</div>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui middle aligned center aligned grid">
+			<div class="column">
+				<div class="inline required field">
+					<div class="ui inverted checkbox">
+						<input type="checkbox" name="Terms"/>
+						<label style="cursor: pointer;" onclick={ ShowTerms(TermsModalTagId) }>I agree to the <a><b>terms and conditions</b></a></label>
+					</div>
+				</div>
+				<button class="ui vertical animated fluid primary submit button">
+					<div class="hidden content"><i class="upload icon"></i></div>
+					<div class="visible content">
+						Create
+					</div>
+				</button>
+			</div>
+		</div>
+	</form>
+	@CreateFormInit(CreateFormTagId)
+}

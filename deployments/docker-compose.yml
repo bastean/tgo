@@ -19,6 +19,7 @@ services:
   tgo:
     container_name: ${TGO_CONTAINER_NAME}
     image: ${TGO_IMAGE_TAG}
+    pull_policy: never
     build:
       context: ..
       dockerfile: deployments/Dockerfile
@@ -33,8 +34,6 @@ services:
       TGO_SERVER_ECHO_HOSTNAME: ${TGO_SERVER_ECHO_HOSTNAME}
       TGO_SERVER_ECHO_PORT: ${TGO_SERVER_ECHO_PORT}
       TGO_SERVER_ECHO_URL: ${TGO_SERVER_ECHO_URL}
-      TGO_SERVER_ECHO_MODE: ${TGO_SERVER_ECHO_MODE}
-      TGO_SERVER_ECHO_ALLOWED_HOSTS: ${TGO_SERVER_ECHO_ALLOWED_HOSTS}
       TGO_DEV_AIR_PROXY_PORT: ${TGO_DEV_AIR_PROXY_PORT}
     command: ${TGO_CONTAINER_START}
     ports:

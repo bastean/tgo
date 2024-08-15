@@ -7,6 +7,7 @@ import (
 	"github.com/bastean/tgo/internal/pkg/service/logger/log"
 	"github.com/bastean/tgo/internal/pkg/service/persistence/cassandra"
 	"github.com/bastean/tgo/internal/pkg/service/user"
+	"github.com/bastean/tgo/internal/pkg/service/user/portfolio"
 )
 
 var Service = &struct {
@@ -56,7 +57,7 @@ func Up() error {
 
 	CoinGecko, err = coingecko.New(
 		env.APICoinGeckoDemoKey,
-		"https://api.coingecko.com/api/v3/",
+		"https://api.coingecko.com/api/v3",
 	)
 
 	if err != nil {
@@ -83,6 +84,10 @@ func Up() error {
 	)
 
 	user.Start(
+		table,
+	)
+
+	portfolio.Start(
 		table,
 		market,
 	)
