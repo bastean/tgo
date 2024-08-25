@@ -29,5 +29,5 @@ var (
 )
 
 func IsNot(err error, target error) bool {
-	return !Is(err, target)
+	return err != nil && !Is(err, target)
 }

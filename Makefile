@@ -97,18 +97,22 @@ generate-required:
 	find . -name "*_templ.go" -type f -delete
 	templ generate
 
+#*______Restorations______
+
+restore:
+	${npx} husky init
+	git restore .
+
 #*______Initializations______
 
-init: upgrade-managers install-tooling download-dependencies copydeps generate-required
+init: upgrade-managers install-tooling download-dependencies copydeps generate-required restore
 
-init-ci: upgrade-managers install-tooling-ci download-dependencies generate-required
+init-ci: upgrade-managers install-tooling-ci download-dependencies generate-required restore
 
 genesis:
 	git init
 	git add .
 	$(MAKE) init
-	${npx} husky init
-	git restore .
 
 #*______Linters/Formatters______
 
@@ -264,13 +268,13 @@ compose-prod-down:
 	${docker-rm-img} tgo
 
 compose-prod: compose-prod-down
-	${compose-env} .env.prod up
+	${compose-env} .env.prod up --exit-code-from tgo
 
 demo-down:
 	${compose-env} .env.demo down
 
 demo: demo-down
-	${compose-env} .env.demo up
+	${compose-env} .env.demo up --exit-code-from tgo
 
 compose-down: compose-dev-down compose-test-down compose-prod-down demo-down
 

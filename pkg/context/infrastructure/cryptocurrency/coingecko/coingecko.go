@@ -169,7 +169,7 @@ func (api *CoinGecko) CoinPrices(currency string, coins []string) (map[string]fl
 	for _, coin := range coins {
 		price = data[coin][currency]
 
-		if price > 0 {
+		if price >= 1 {
 			price = math.Floor(price*100) / 100
 		}
 

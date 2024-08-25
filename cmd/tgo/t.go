@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -9,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/bastean/tgo/internal/app/bot"
 	"github.com/bastean/tgo/internal/app/server"
 	"github.com/bastean/tgo/internal/pkg/service"
 	"github.com/bastean/tgo/internal/pkg/service/env"
@@ -58,6 +60,12 @@ func main() {
 		}
 	}()
 
+	go func() {
+		if err := bot.Up(); err != nil {
+			log.Fatal(err.Error())
+		}
+	}()
+
 	log.Started(Apps)
 
 	log.Info("Press Ctrl+C to exit")
@@ -74,7 +82,11 @@ func main() {
 
 	log.Stopping(Apps)
 
-	if err = server.Down(ctx); err != nil {
+	errServer := server.Down(ctx)
+
+	errBot := bot.Down()
+
+	if err := errors.Join(errServer, errBot); err != nil {
 		log.Error(err.Error())
 	}
 

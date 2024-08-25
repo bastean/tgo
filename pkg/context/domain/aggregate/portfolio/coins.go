@@ -15,7 +15,7 @@ const (
 )
 
 type Coins struct {
-	Value []string `validate:"gte=1,lte=10,unique,dive,gte=4,lte=20,alphanum"`
+	Value []string `validate:"gte=1,lte=10,unique,dive,gte=4,lte=20"`
 }
 
 func NewCoins(value []string) (*Coins, error) {
@@ -26,7 +26,7 @@ func NewCoins(value []string) (*Coins, error) {
 	if service.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewCoins",
-			What:  fmt.Sprintf("The amount of coins must be between %s and %s, without repeating, the names must be from %s to %s characters and only alphanumeric", CoinsMinAmount, CoinsMaxAmount, CoinMinCharactersLength, CoinMaxCharactersLength),
+			What:  fmt.Sprintf("The amount of coins must be between %s and %s, without repeating, and the names must be from %s to %s characters", CoinsMinAmount, CoinsMaxAmount, CoinMinCharactersLength, CoinMaxCharactersLength),
 			Why: errors.Meta{
 				"Coins": value,
 			},
