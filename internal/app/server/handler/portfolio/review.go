@@ -25,7 +25,7 @@ func Review(c echo.Context) error {
 	found, err := user.Read.Run(primitive.Username)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Read")
+		return errors.BubbleUp(err, "Review")
 	}
 
 	prices, err := portfolio.Price.Run(primitive.Username)
