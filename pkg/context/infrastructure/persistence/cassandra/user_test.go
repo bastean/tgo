@@ -47,10 +47,10 @@ func (suite *UserTestSuite) SetupTest() {
 	}
 }
 
-func (suite *UserTestSuite) TestSave() {
+func (suite *UserTestSuite) TestCreate() {
 	expected := user.Random()
 
-	suite.NoError(suite.sut.Save(expected))
+	suite.NoError(suite.sut.Create(expected))
 
 	criteria := &repository.UserSearchCriteria{
 		Username: expected.Username,
@@ -63,12 +63,12 @@ func (suite *UserTestSuite) TestSave() {
 	suite.Equal(expected, actual)
 }
 
-func (suite *UserTestSuite) TestSaveErrDuplicateKey() {
+func (suite *UserTestSuite) TestCreateErrDuplicateKey() {
 	random := user.Random()
 
-	suite.NoError(suite.sut.Save(random))
+	suite.NoError(suite.sut.Create(random))
 
-	err := suite.sut.Save(random)
+	err := suite.sut.Create(random)
 
 	var actual *errors.ErrAlreadyExist
 
@@ -76,7 +76,7 @@ func (suite *UserTestSuite) TestSaveErrDuplicateKey() {
 
 	expected := &errors.ErrAlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "Save",
+		Where: "Create",
 		What:  fmt.Sprintf("%s already registered", random.Username.Value),
 		Why: errors.Meta{
 			"Username": random.Username.Value,
@@ -89,7 +89,7 @@ func (suite *UserTestSuite) TestSaveErrDuplicateKey() {
 func (suite *UserTestSuite) TestUpdate() {
 	expected := user.Random()
 
-	suite.NoError(suite.sut.Save(expected))
+	suite.NoError(suite.sut.Create(expected))
 
 	expected.Portfolio = portfolio.Random()
 
@@ -109,7 +109,7 @@ func (suite *UserTestSuite) TestUpdate() {
 func (suite *UserTestSuite) TestDelete() {
 	random := user.Random()
 
-	suite.NoError(suite.sut.Save(random))
+	suite.NoError(suite.sut.Create(random))
 
 	suite.NoError(suite.sut.Delete(random.Username))
 
@@ -125,7 +125,7 @@ func (suite *UserTestSuite) TestDelete() {
 func (suite *UserTestSuite) TestSearch() {
 	expected := user.Random()
 
-	suite.NoError(suite.sut.Save(expected))
+	suite.NoError(suite.sut.Create(expected))
 
 	criteria := &repository.UserSearchCriteria{
 		Username: expected.Username,

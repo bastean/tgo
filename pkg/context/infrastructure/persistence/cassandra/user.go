@@ -15,14 +15,14 @@ type User struct {
 	Table string
 }
 
-func (cassandra *User) Save(user *user.User) error {
+func (cassandra *User) Create(user *user.User) error {
 	exists, _ := cassandra.Search(&repository.UserSearchCriteria{
 		Username: user.Username,
 	})
 
 	if exists != nil {
 		return errors.NewAlreadyExist(&errors.Bubble{
-			Where: "Save",
+			Where: "Create",
 			What:  fmt.Sprintf("%s already registered", user.Username.Value),
 			Why: errors.Meta{
 				"Username": user.Username.Value,
@@ -34,7 +34,7 @@ func (cassandra *User) Save(user *user.User) error {
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
-			Where: "Save",
+			Where: "Create",
 			What:  "Failure to JSON encoding",
 			Why: errors.Meta{
 				"Username": user.Username.Value,
@@ -51,7 +51,7 @@ func (cassandra *User) Save(user *user.User) error {
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
-			Where: "Save",
+			Where: "Create",
 			What:  "Failure to save a User",
 			Why: errors.Meta{
 				"Username": user.Username.Value,
@@ -68,7 +68,7 @@ func (cassandra *User) Update(user *user.User) error {
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
-			Where: "Save",
+			Where: "Create",
 			What:  "Failure to JSON encoding",
 			Why: errors.Meta{
 				"Username": user.Username.Value,

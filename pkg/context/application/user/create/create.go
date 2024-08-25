@@ -18,7 +18,7 @@ func (create *Create) Run(primitive *user.Primitive) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = create.User.Save(new)
+	err = create.User.Create(new)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

@@ -26,7 +26,7 @@ func (suite *CreateTestSuite) TestCreate() {
 
 	primitive := random.ToPrimitive()
 
-	suite.repository.On("Save", random)
+	suite.repository.On("Create", random)
 
 	suite.NoError(suite.sut.Run(primitive))
 
