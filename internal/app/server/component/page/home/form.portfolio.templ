@@ -36,7 +36,7 @@ script PortfolioFormInit(formTagId string) {
                 _.forIn(response.Data.Prices, function(price, coin) {
                     prices += `
                         <div class="item">
-                            <b>${coin}:</b> ${price}
+                            <b>${coin}:</b> ${price} ${response.Data.Currency}
                         </div>
                     `
                 });

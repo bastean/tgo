@@ -2,10 +2,11 @@ package review
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/bastean/tgo/internal/app/bot/handler"
 	"github.com/bastean/tgo/internal/app/bot/util/errs"
+	"github.com/bastean/tgo/internal/app/bot/util/escape"
+	"github.com/bastean/tgo/internal/pkg/service/user"
 	"github.com/bastean/tgo/internal/pkg/service/user/portfolio"
 	tele "gopkg.in/telebot.v3"
 )
@@ -30,6 +31,12 @@ func Run(c tele.Context) error {
 
 	username := args[0]
 
+	found, err := user.Read.Run(username)
+
+	if err != nil {
+		return handler.Error(c, err)
+	}
+
 	prices, err := portfolio.Price.Run(username)
 
 	if err != nil {
@@ -43,15 +50,13 @@ func Run(c tele.Context) error {
 
 	for coin, price := range prices {
 		result += fmt.Sprintf(`
-\- *%s:* %g
-`, coin, price)
+- *%s:* %f %s
+`, coin, price, found.Portfolio.Currency)
 	}
 
-	result = strings.ReplaceAll(result, ".", "\\.")
+	result = escape.ReservedCharacters(result)
 
-	err = c.Send(result, &tele.SendOptions{
-		ParseMode: "MarkdownV2",
-	})
+	err = c.Send(result, &tele.SendOptions{ParseMode: "MarkdownV2"})
 
 	if err != nil {
 		return handler.Error(c, errs.Response(err, "Run"))

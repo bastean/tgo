@@ -5,6 +5,7 @@ import (
 
 	"github.com/bastean/tgo/internal/app/bot/handler"
 	"github.com/bastean/tgo/internal/app/bot/util/errs"
+	"github.com/bastean/tgo/internal/app/bot/util/escape"
 	"github.com/bastean/tgo/internal/pkg/service/user"
 	tele "gopkg.in/telebot.v3"
 )
@@ -35,7 +36,7 @@ func Run(c tele.Context) error {
 		return handler.Error(c, err)
 	}
 
-	err = c.Send(fmt.Sprintf(`*Found*
+	result := fmt.Sprintf(`*Found*
 
 *Username:* %s
 
@@ -44,10 +45,11 @@ func Run(c tele.Context) error {
 *Currency:* %s
 
 *Coins:* %s
-`, found.Username, found.Portfolio.Currency, found.Portfolio.Coins),
-		&tele.SendOptions{
-			ParseMode: "MarkdownV2",
-		})
+`, found.Username, found.Portfolio.Currency, found.Portfolio.Coins)
+
+	result = escape.ReservedCharacters(result)
+
+	err = c.Send(result, &tele.SendOptions{ParseMode: "MarkdownV2"})
 
 	if err != nil {
 		return handler.Error(c, errs.Response(err, "Run"))

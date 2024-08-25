@@ -72,11 +72,11 @@ func Down() error {
 	log.Stopping(Bot.Telegram)
 
 	if _, err := Session.Close(); err != nil {
-		log.DisconnectionFailedWith(Bot.Telegram)
+		log.CannotBeStopped(Bot.Telegram)
 
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Down",
-			What:  "Failure to close Telegram Bot connection",
+			What:  "Failure to close Telegram Bot instance",
 			Who:   err,
 		})
 	}
