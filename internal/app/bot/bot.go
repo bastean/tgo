@@ -46,7 +46,7 @@ func Up() error {
 
 	log.Started(Bot.Telegram)
 
-	log.Info(fmt.Sprintf("%s logged in as @%s", Bot.Telegram, Session.Me.Username))
+	log.Info(fmt.Sprintf("%s logged in as https://t.me/%s", Bot.Telegram, Session.Me.Username))
 
 	if usernames, ok := env.HasBotTelegramWhitelistUsernames(); ok {
 		Session.Use(middleware.Whitelist(usernames))

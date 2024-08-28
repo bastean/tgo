@@ -6,8 +6,12 @@ import (
 )
 
 var (
-	BotTelegramToken = os.Getenv("TGO_BOT_TELEGRAM_TOKEN")
+	BotTelegramToken string
 )
+
+func Bot() {
+	BotTelegramToken = os.Getenv("TGO_BOT_TELEGRAM_TOKEN")
+}
 
 func HasBotTelegramWhitelistUsernames() ([]string, bool) {
 	whitelist := os.Getenv("TGO_BOT_TELEGRAM_WHITELIST_USERNAMES")

@@ -3,22 +3,16 @@ package main
 import (
 	"context"
 	"errors"
-	"flag"
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/bastean/tgo/internal/app/bot"
+	"github.com/bastean/tgo/internal/app/cli"
 	"github.com/bastean/tgo/internal/app/server"
 	"github.com/bastean/tgo/internal/pkg/service"
-	"github.com/bastean/tgo/internal/pkg/service/env"
 	"github.com/bastean/tgo/internal/pkg/service/logger/log"
-)
-
-const (
-	cli = "tgo"
 )
 
 var (
@@ -30,17 +24,10 @@ var (
 	Apps     = "Apps"
 )
 
-func usage() {
-	fmt.Printf("Usage: %s [OPTIONS]\n\n", cli)
-	flag.PrintDefaults()
-}
-
 func main() {
-	flag.StringVar(&env.ServerEchoPort, "port", env.ServerEchoPort, "Echo Server Port (optional)")
-
-	flag.Usage = usage
-
-	flag.Parse()
+	if err = cli.Up(); err != nil {
+		log.Fatal(err.Error())
+	}
 
 	log.Logo()
 

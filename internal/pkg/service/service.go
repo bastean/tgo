@@ -30,6 +30,8 @@ var (
 )
 
 func Up() error {
+	env.Init()
+
 	log.EstablishingConnectionWith(Service.Cassandra)
 
 	Cassandra, err = cassandra.Open(

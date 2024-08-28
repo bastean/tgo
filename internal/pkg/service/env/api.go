@@ -5,5 +5,9 @@ import (
 )
 
 var (
-	APICoinGeckoDemoKey = os.Getenv("TGO_API_COINGECKO_DEMO_KEY")
+	APICoinGeckoDemoKey string
 )
+
+func API() {
+	APICoinGeckoDemoKey = os.Getenv("TGO_API_COINGECKO_DEMO_KEY")
+}
