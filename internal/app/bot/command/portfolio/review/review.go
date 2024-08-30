@@ -2,6 +2,7 @@ package review
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/bastean/tgo/internal/app/bot/handler"
 	"github.com/bastean/tgo/internal/app/bot/util/errs"
@@ -50,8 +51,8 @@ func Run(c tele.Context) error {
 
 	for coin, price := range prices {
 		result += fmt.Sprintf(`
-- *%s:* %f %s
-`, coin, price, found.Portfolio.Currency)
+- *%s:* %s %s
+`, coin, strconv.FormatFloat(price, 'f', -1, 64), found.Portfolio.Currency)
 	}
 
 	result = escape.ReservedCharacters(result)
